@@ -1,0 +1,32 @@
+{
+  "name": "prediktor-opc-ua-browser",
+  "version": "1.0.0",
+  "description": "Panel for OPC UA datasource browse",
+  "scripts": {
+    "build": "grafana-toolkit plugin:build",
+    "test": "grafana-toolkit plugin:test",
+    "dev": "grafana-toolkit plugin:dev",
+    "watch": "grafana-toolkit plugin:dev --watch"
+  },
+  "repository": "github:PrediktorAS/grafana",
+  "author": "Oddvar Grønning",
+  "license": "Apache-2.0",
+  "bugs":  "https://github.com/PrediktorAS/grafana/issues",
+  "devDependencies": {
+    "@grafana/data": "^7.2.0",
+    "@grafana/toolkit": "^7.2.0",
+    "@grafana/ui": "^7.2.0",
+    "emotion": "10.0.27"
+  },
+  "engines": {
+    "node": ">=12 <=15"
+  },
+  "dependencies": {
+    "@babel/helper-validator-option": "^7.12.1",
+    "@grafana/runtime": "^7.2.0",
+    "is-core-module": "^2.1.0",
+    "react-icons": "^3.11.0",
+    "react-select": "^3.1.0",
+    "react-split-pane": "^0.1.92"
+  }
+}

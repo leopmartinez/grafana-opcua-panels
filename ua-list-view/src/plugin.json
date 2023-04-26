@@ -1,0 +1,36 @@
+{
+  "type": "panel",
+  "name": "prediktor-opc-ua-list-view",
+  "id": "prediktor-opc-ua-list-view",
+  "info": {
+    "description": "Lists ua variables in a list",
+    "author": {
+      "name": "Oddvar Grønning",
+      "url": "www.prediktor.com"
+    },
+    "keywords": [
+      "opc ua prediktor"
+    ],
+    "logos": {
+      "small": "img/logo.svg",
+      "large": "img/logo.svg"
+    },
+    "links": [
+      {
+        "name": "Website",
+        "url": "https://github.com/PrediktorAS/grafana/tree/main/ua-list-view"
+      },
+      {
+        "name": "License",
+        "url": "https://github.com/PrediktorAS/grafana/tree/main/ua-list-view/LICENSE"
+      }
+    ],
+    "screenshots": [],
+    "version": "%VERSION%",
+    "updated": "%TODAY%"
+  },
+  "dependencies": {
+    "grafanaVersion": "7.0.x",
+    "plugins": []
+  }
+}

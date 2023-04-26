@@ -1,0 +1,17 @@
+{
+    "id": "prediktor-opc-ua-event-view",
+    "type": "panel",
+    "url": "https://github.com/PrediktorAS/grafana/tree/main/ua-event-view",
+    "versions": [
+      {
+        "version": "1.0.0",
+        "url": "https://github.com/PrediktorAS/grafana/tree/main/ua-event-view",
+        "download": {
+          "any": {
+            "url": "https://github.com/PrediktorAS/grafana/tree/main/ua-event-view/releases/prediktor-opc-ua-event-view-1.0.0.zip",
+            "md5": "C8A2E7059580CE59570258321C37438B"
+          }
+        }
+      }
+    ]
+  }

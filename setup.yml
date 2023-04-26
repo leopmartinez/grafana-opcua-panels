@@ -1,0 +1,226 @@
+variables:
+  ArtifactPath: '\\nofresbld002\tfsdrops\$(Build.SourceBranchName)_$(Build.DefinitionName)\$(Build.BuildNumber)'
+
+trigger: none
+
+# NOTE! in UTC !!!
+schedules:
+- cron: "0 4 * * *"
+  #always: true
+  displayName: Daily build master
+  branches:
+    include:
+    - main
+
+resources:
+  repositories:
+  - repository: opcua-datasource # The name used to reference this repository in the checkout step
+    type: github
+    endpoint: cfjeld
+    name: PrediktorAS/opcua-datasource
+  - repository: grafanaplugins # The name used to reference this repository in the checkout step
+    type: github
+    endpoint: cfjeld
+    name: PrediktorAS/grafana
+
+pool:
+  name: apis-foundation-master 
+  #nofresbld002
+
+steps:
+- checkout: grafanaplugins
+- checkout: opcua-datasource
+- task: NodeTool@0
+  inputs:
+    versionSpec: '14.5'
+- task: YarnInstaller@3
+  inputs:
+    versionSpec: '1.x'
+
+#ua-browser
+- task: Yarn@3
+  inputs:
+   ProjectDirectory: 'grafana/ua-browser'
+   arguments: install
+  displayName: 'ua-browser install pkgs'
+
+- task: Yarn@3
+  displayName: 'ua-browser build'
+  inputs:
+   projectDirectory: 'grafana/ua-browser'
+   arguments: 'build'
+  
+- task: CopyFiles@2
+  displayName: 'Copy ua-browser'
+  inputs:
+    SourceFolder: '$(agent.builddirectory)/s/grafana/ua-browser/dist'
+    Contents: '**'
+    TargetFolder: '$(build.artifactstagingdirectory)/binaries/ua-browser'
+#ua-dashboard-container
+- task: Yarn@3
+  inputs:
+   ProjectDirectory: 'grafana/ua-dashboard-container'
+   arguments: install
+  displayName: 'ua-dashboard-container install pkgs'
+
+- task: Yarn@3
+  displayName: 'ua-dashboard-container build'
+  inputs:
+   projectDirectory: 'grafana/ua-dashboard-container'
+   arguments: 'build'
+  
+- task: CopyFiles@2
+  displayName: 'Copy ua-dashboard-container'
+  inputs:
+    SourceFolder: '$(agent.builddirectory)/s/grafana/ua-dashboard-container/dist'
+    Contents: '**'
+    TargetFolder: '$(build.artifactstagingdirectory)/binaries/ua-dashboard-container'
+#ua-list-view
+- task: Yarn@3
+  inputs:
+   ProjectDirectory: 'grafana/ua-list-view'
+   arguments: install
+  displayName: 'ua-list-view install pkgs'
+
+- task: Yarn@3
+  displayName: 'ua-list-view build'
+  inputs:
+   projectDirectory: 'grafana/ua-list-view'
+   arguments: 'build'
+  
+- task: CopyFiles@2
+  displayName: 'Copy ua-list-view'
+  inputs:
+    SourceFolder: '$(agent.builddirectory)/s/grafana/ua-list-view/dist'
+    Contents: '**'
+    TargetFolder: '$(build.artifactstagingdirectory)/binaries/ua-list-view'
+
+#ua-event-view
+- task: Yarn@3
+  inputs:
+   ProjectDirectory: 'grafana/ua-event-view'
+   arguments: install
+  displayName: 'ua-event-view install pkgs'
+
+- task: Yarn@3
+  displayName: 'ua-event-view build'
+  inputs:
+   projectDirectory: 'grafana/ua-event-view'
+   arguments: 'build'
+  
+- task: CopyFiles@2
+  displayName: 'Copy ua-event-view'
+  inputs:
+    SourceFolder: '$(agent.builddirectory)/s/grafana/ua-event-view/dist'
+    Contents: '**'
+    TargetFolder: '$(build.artifactstagingdirectory)/binaries/ua-event-view'
+#opcua
+- task: Yarn@3
+  inputs:
+   ProjectDirectory: 'opcua-datasource'
+   arguments: install
+  displayName: 'opcua-datasource install pkgs'
+
+- task: Yarn@3
+  displayName: 'opcua-datasource build'
+  inputs:
+   projectDirectory: 'opcua-datasource'
+   arguments: 'build'
+  
+- task: CopyFiles@2
+  displayName: 'Copy opcua-datasource Windows'
+  inputs:
+    SourceFolder: '$(agent.builddirectory)/s/opcua-datasource/dist'
+    Contents: '**'
+    TargetFolder: '$(build.artifactstagingdirectory)/binaries/opcua'
+
+- task: CopyFiles@2
+  displayName: 'Copy opcua-datasource Linux'
+  inputs:
+    SourceFolder: '$(agent.builddirectory)/s/opcua-datasource/dist'
+    Contents: '**'
+    TargetFolder: '$(build.artifactstagingdirectory)/binaries/opcua_linux'
+
+
+- task: NuGetToolInstaller@1
+  inputs:
+    versionSpec: '5.8.0' #From SWA with love!
+
+
+- task: DotNetCoreCLI@2
+  displayName: 'Restore vs solutions'
+  inputs:
+    command: restore
+    projects: '**/*.csproj'
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet build'
+  inputs:
+    command: 'build'
+    arguments: '-c Release'
+    projects: 'opcua-datasource/backend/plugin-dotnet.sln'
+
+- task: DevEnvBuild@2
+  displayName: 'Build setupkit'
+  inputs:
+    solution: 'grafana/grafana-setup/grafana-setup.sln'
+    vsVersion: 'latest'
+    buildCfg: 'Setup_Release'
+    buildPlatform: 'x64'
+
+- task: CopyFiles@2
+  displayName: 'Copy setupkit'
+  inputs:
+    SourceFolder: '$(agent.builddirectory)/s/grafana/grafana-setup/grafana-setup/Release'
+    Contents: '**'
+    TargetFolder: '$(build.artifactstagingdirectory)/setup'
+
+- task: DotNetCoreCLI@2
+  displayName: 'dotnet publish Windows'
+  inputs:
+    command: 'publish'
+    arguments: '-c Release -r win-x64 --self-contained true'
+    publishWebProjects: false
+    zipAfterPublish: false
+    projects: 'opcua-datasource/backend/plugin-dotnet.sln'
+ 
+
+# - task: MSBuild@1
+#   displayName: 'Build backend plugin'
+#   inputs:
+#     solution: 'opcua-datasource/pkg/dotnet/plugin-dotnet/plugin-dotnet.sln'
+#     platform: 'Any CPU'
+#     configuration: 'Release'
+
+- task: CopyFiles@2
+  displayName: 'Copy publish Windows'
+  inputs:
+    SourceFolder: '$(agent.builddirectory)/s/opcua-datasource/backend/bin/Release/netcoreapp3.1/win-x64/publish'
+    Contents: '**'
+    TargetFolder: '$(build.artifactstagingdirectory)/binaries/opcua'
+
+- task: DotNetCoreCLI@2
+  displayName: 'pulish linux'
+  inputs:
+    command: 'publish'
+    publishWebProjects: false
+    zipAfterPublish: false
+    arguments: '-c Release -r linux-x64 --self-contained true'
+    projects: 'opcua-datasource/backend/.linux.build.csproj'
+
+- task: CopyFiles@2
+  displayName: 'Copy publish Linux'
+  inputs:
+    SourceFolder: '$(agent.builddirectory)/s/opcua-datasource/backend/bin/Release/netcoreapp3.1/linux-x64/publish'
+    Contents: '**'
+    TargetFolder: '$(build.artifactstagingdirectory)/binaries/opcua_linux'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    ArtifactName: 'grafana'
+    publishLocation: 'FilePath'
+    TargetPath: $(ArtifactPath)
+
+  timeoutInMinutes: 60
+

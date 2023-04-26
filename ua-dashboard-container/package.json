@@ -1,0 +1,27 @@
+{
+  "name": "prediktor-opc-ua-dashboard",
+  "version": "1.0.0",
+  "description": "Panel Wrapper for UA dashboards",
+  "scripts": {
+    "build": "grafana-toolkit plugin:build",
+    "test": "grafana-toolkit plugin:test",
+    "dev": "grafana-toolkit plugin:dev",
+    "watch": "grafana-toolkit plugin:dev --watch"
+  },
+  "repository": "github:PrediktorAS/grafana",
+  "author": "Oddvar Grønning",
+  "license": "Apache-2.0",
+  "bugs":  "https://github.com/PrediktorAS/grafana/issues",
+  "devDependencies": {
+    "@grafana/data": "^7.0.0",
+    "@grafana/toolkit": "^7.0.0",
+    "@grafana/ui": "^7.0.0",
+    "emotion": "10.0.27"
+  },
+  "engines": {
+    "node": ">=12 <=15"
+  },
+  "dependencies": {
+    "@grafana/runtime": "^7.2.1"
+  }
+}

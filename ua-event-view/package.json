@@ -1,0 +1,34 @@
+{
+  "name": "prediktor-opc-ua-event-view",
+  "version": "1.0.0",
+  "description": "A plugin for visualization of alarms and events",
+  "scripts": {
+    "build": "grafana-toolkit plugin:build",
+    "test": "grafana-toolkit plugin:test",
+    "dev": "grafana-toolkit plugin:dev",
+    "watch": "grafana-toolkit plugin:dev --watch"
+  },
+  "repository": "github:PrediktorAS/grafana",
+  "author": "Oddvar Grønning",
+  "license": "Apache-2.0",
+  "bugs":  "https://github.com/PrediktorAS/grafana/issues",
+  "devDependencies": {
+    "@grafana/data": "^7.0.0",
+    "@grafana/toolkit": "^7.0.0",
+    "@grafana/ui": "^7.3.6",
+    "@types/lodash": "^4.14.167",
+    "emotion": "10.0.27"
+  },
+  "engines": {
+    "node": ">=12 <15"
+  },
+  "dependencies": {
+    "@material-ui/core": "^4.11.2",
+    "@material-ui/data-grid": "^4.0.0-alpha.15",
+    "@types/react-window": "^1.8.2",
+    "@types/tinycolor2": "^1.4.2",
+    "lodash.map": "^4.6.0",
+    "react-window": "^1.8.6",
+    "tinycolor2": "^1.4.2"
+  }
+}

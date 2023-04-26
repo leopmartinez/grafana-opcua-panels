@@ -1,0 +1,36 @@
+{
+  "type": "panel",
+  "name": "prediktor-opc-ua-dashboard",
+  "id": "prediktor-opc-ua-dashboard",
+  "info": {
+    "description": "Wrapper for ua dashboards",
+    "author": {
+      "name": "Oddvar Grønning",
+      "url": "www.prediktor.com"
+    },
+    "keywords": [
+      "ua opc prediktor"
+    ],
+    "logos": {
+      "small": "img/logo.svg",
+      "large": "img/logo.svg"
+    },
+    "links": [
+      {
+        "name": "Website",
+        "url": "https://github.com/PrediktorAS/grafana/tree/main/ua-dashboard-container"
+      },
+      {
+        "name": "License",
+        "url": "https://github.com/PrediktorAS/grafana/tree/main/ua-dashboard-container/LICENSE"
+      }
+    ],
+    "screenshots": [],
+    "version": "%VERSION%",
+    "updated": "%TODAY%"
+  },
+  "dependencies": {
+    "grafanaVersion": "7.0.x",
+    "plugins": []
+  }
+}
